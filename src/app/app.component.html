@@ -1,0 +1,22 @@
+<ul *ngIf="products$ | async as products; else productError">
+  <li *ngFor="let product of products">
+    {{product.getProductDescription()}}
+    {{product.isActivated()}}
+    <button type="button" (click)="saveProduct(product)">Save Product</button>
+  </li>
+</ul>
+
+<button type="button" (click)="createProduct()">Create product</button>
+
+<ng-template #productError>
+  <p>Ops, error loading </p>
+</ng-template>
+
+<ng-container *ngIf="genericError">
+  <p *ngIf="genericError.isBadRequest()">BAD Request: {{genericError.getMessage()}}</p>
+  <p *ngIf="genericError.isServerError()">SERVER Error: {{genericError.getMessage()}}</p>
+</ng-container>
+
+<ng-container *ngIf="successResponse">
+  <p>{{successResponse.getMessage()}}</p>
+</ng-container>
