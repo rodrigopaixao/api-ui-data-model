@@ -1,10 +1,19 @@
-<ul *ngIf="products$ | async as products; else productError">
-  <li *ngFor="let product of products">
-    {{product.getProductDescription()}}
-    {{product.isActivated()}}
-    <button type="button" (click)="saveProduct(product)">Save Product</button>
-  </li>
-</ul>
+<table *ngIf="products$ | async as products; else productError">
+  <tr>
+    <th>Product Name</th>
+    <th>Description</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+  <tr *ngFor="let product of products">
+    <td>{{product.name}}</td>
+    <td>{{product.getProductDescription()}}</td>
+    <td>{{product.isActivated()}}</td>
+    <td>
+      <button type="button" (click)="saveProduct(product)">Save Product</button>
+    </td>
+  </tr>
+</table>
 
 <button type="button" (click)="createProduct()">Create product</button>
 
