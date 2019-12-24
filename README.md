@@ -1,4 +1,4 @@
-# API vs UI data models
+# API/UI data models
 
 This project is to describe how to use data models in your UI.
 
