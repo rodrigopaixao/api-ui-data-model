@@ -1,3 +1,5 @@
+<!-- Product list -->
+
 <table *ngIf="products$ | async as products; else productError">
   <tr>
     <th>Product Name</th>
@@ -17,6 +19,8 @@
 
 <button type="button" (click)="createProduct()">Create product</button>
 
+<!-- Error messages -->
+
 <ng-template #productError>
   <p>Ops, error loading </p>
 </ng-template>
@@ -25,6 +29,8 @@
   <p *ngIf="genericError.isBadRequest()">BAD Request: {{genericError.getMessage()}}</p>
   <p *ngIf="genericError.isServerError()">SERVER Error: {{genericError.getMessage()}}</p>
 </ng-container>
+
+<!-- Success message -->
 
 <ng-container *ngIf="successResponse">
   <p>{{successResponse.getMessage()}}</p>
