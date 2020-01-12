@@ -1,15 +1,20 @@
 <!-- Product list -->
 
-<table *ngIf="products$ | async as products; else productError">
+<table *ngIf="products?.length > 0; else productError">
   <tr>
     <th>Product Name</th>
     <th>Description</th>
+    <th>Price</th>
     <th>Status</th>
     <th>Actions</th>
   </tr>
-  <tr *ngFor="let product of products">
+  <tr *ngFor="let product of products" [ngClass]="{
+    'new-product': product.isNew,
+    'updated-product': product.isUpdated
+    }">
     <td>{{product.name}}</td>
     <td>{{product.getProductDescription()}}</td>
+    <td>{{product.price | currency}}</td>
     <td>{{product.isActivated()}}</td>
     <td>
       <button type="button" (click)="saveProduct(product)">Save Product</button>
@@ -17,7 +22,11 @@
   </tr>
 </table>
 
-<button type="button" (click)="createProduct()">Create product</button>
+<hr/>
+
+<!-- Form Component -->
+
+<app-add-product-form (onSaveSuccessfully)="onProductAdded($event)"></app-add-product-form>
 
 <!-- Error messages -->
 
@@ -28,10 +37,4 @@
 <ng-container *ngIf="genericError">
   <p *ngIf="genericError.isBadRequest()">BAD Request: {{genericError.getMessage()}}</p>
   <p *ngIf="genericError.isServerError()">SERVER Error: {{genericError.getMessage()}}</p>
-</ng-container>
-
-<!-- Success message -->
-
-<ng-container *ngIf="successResponse">
-  <p>{{successResponse.getMessage()}}</p>
 </ng-container>

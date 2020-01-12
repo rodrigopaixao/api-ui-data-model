@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductsService } from './services/products.service';
-import { UUID } from 'angular2-uuid';
-import { Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 
-import { STATUSES } from './models/status.model';
 import { Product } from './models/product.model';
+import { ProductsService } from './services/products.service';
 import { GenericErrorResponse } from './models/generic-error.response';
-import { GenericSuccessResponse } from './models/generic-success.response';
+
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -15,39 +14,38 @@ import { GenericSuccessResponse } from './models/generic-success.response';
 })
 export class AppComponent implements OnInit {
 
-  public products$: Observable<Product[]>;
-  public successResponse: GenericSuccessResponse;
+  public products: Product[];
   public genericError: GenericErrorResponse;
 
   constructor(private productsService: ProductsService) {
   }
 
   ngOnInit(): void {
-    this.products$ = this.productsService.getList();
+    this.getListOfProducts();
   }
 
   saveProduct(product: Product): void {
     this.genericError = undefined;
-    this.successResponse = undefined;
 
     this.productsService.save(product)
-      .subscribe(
-        res => {
-          this.successResponse = res;
-        },
-        error => {
+      .pipe(
+        catchError(error => {
           this.genericError = error;
-        });
+          return throwError(error);
+        })
+      )
+      .subscribe(() => {
+        product.setAsUpdated();
+      });
   }
 
-  createProduct(): void {
-    const product = new Product(UUID.UUID(), 'Product D', 200, STATUSES.ACTIVE);
+  onProductAdded(product: Product) {
+    this.products.push(product);
+  }
 
-    this.productsService.create(product)
-      .subscribe(res => {
-        this.successResponse = res;
-      }, err => {
-        this.genericError = err;
-      });
+  private getListOfProducts() {
+    this.productsService.getList().subscribe(res => {
+      this.products = res;
+    });
   }
 }
