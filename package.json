@@ -52,7 +52,7 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "morgan": "~1.9.1",
     "protractor": "~5.4.0",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3",
